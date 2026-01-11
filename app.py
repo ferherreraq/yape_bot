@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 import re
 import requests
 from datetime import datetime
 
 app = Flask(__name__)
+# Habilitar CORS para permitir peticiones desde el navegador
+CORS(app)
 
 # ==================== CONFIGURACIÓN ====================
 API_KEY = os.environ.get('WEBHOOK_API_KEY', 'tu_clave_secreta_aqui_cambiar')
@@ -77,7 +80,11 @@ def home():
     return jsonify({
         'status': 'online',
         'service': 'Yape Webhook',
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'endpoints': {
+            'test': '/test',
+            'webhook': '/webhook/yape'
+        }
     })
 
 @app.route('/webhook/yape', methods=['POST'])
